@@ -1,1 +1,1 @@
-# solar-web-cal
+# web_solar_cal

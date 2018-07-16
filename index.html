@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="JS/map.js"></script>
+    <link rel="stylesheet" href="CSS/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="container-fluid top-buffer">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Solar Place For Your Home</h3>
+            <input id="pac-input"
+                   type="text"
+                   placeholder="Enter location"
+                   class="search"
+            >
+            <br>
+            <button id="delete-button" type="button" class="btn btn-danger">Delete Selected Polygon</button>
+            <h3 id="area"></h3>
+        </div>
+
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item">Step-1: Enter location</li>
+                <li class="list-group-item">Step-2: Select the area to draw the polygon</li>
+                <li class="list-group-item">Step-3: Draw the polygon to calculate the area</li>
+                <li class="list-group-item">Step-4: Note down the area </li>
+                <li class="list-group-item">Step-5: Enjoy!!</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div id="map"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7XdqrYjKUafM8swR32XUCsQ90tgnKGwg&sensor=false&libraries=places,geometry,drawing&callback=initMap"
+        async defer></script>
+
+</body>
+</html>
