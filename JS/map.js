@@ -2,30 +2,55 @@
 
 function initMap() {
     var selectedShape;
+
+    // to clear the selected polygon
+    function clearSelection() {
+        if (selectedShape) {
+            selectedShape.setEditable(false);
+            selectedShape = null;
+        }
+    }
+
+    function setSelection(shape) {
+        clearSelection();
+        selectedShape = shape;
+        shape.setEditable(true);
+
+    }
+
+    function deleteSelectedShape() {
+        if (selectedShape) {
+            selectedShape.setMap(null);
+
+        }
+    }
+
 // initial setup of the map when page loads.
+
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 50.064192, lng: -130.605469},
-        zoom: 3
+        zoom: 3,
+        center: {lat: 42.361145, lng: -71.057083}
     });
+
     var card = document.getElementById('pac-card');
     var input = document.getElementById('pac-input');
     var countries = document.getElementById('country-selector');
 
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+
 
     var autocomplete = new google.maps.places.Autocomplete(input);
 
-    //Auto complete with country= united states only
+    //Auto complete with country = united states only
     // Set initial restrict to the greater list of countries.
     autocomplete.setComponentRestrictions(
-        {'country': ['us', 'pr', 'vi', 'gu', 'mp']});
+        {'country': ['us']});
 
     // Specify only the data fields that are needed.
     autocomplete.setFields(
         ['address_components', 'geometry', 'icon', 'name']);
     // drawing polygon with google api
     var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.MARKER,
+        drawingMode: google.maps.drawing.OverlayType.POLYGON,
         drawingControl: true,
         drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_CENTER,
@@ -71,31 +96,9 @@ function initMap() {
         marker.setVisible(true);
 
     });
-    //For are using geometry google API
 
 
-    // to clear the selected polygon
-    function clearSelection() {
-        if (selectedShape) {
-            selectedShape.setEditable(false);
-            selectedShape = null;
-        }
-    }
-
-    function setSelection(shape) {
-        clearSelection();
-        selectedShape = shape;
-        shape.setEditable(true);
-
-    }
-
-    function deleteSelectedShape() {
-        if (selectedShape) {
-            selectedShape.setMap(null);
-
-        }
-    }
-
+    // Using geometry google API
 
 
 //addListener
@@ -112,9 +115,13 @@ function initMap() {
             google.maps.event.addListener(newShape, 'click', function() {
                 setSelection(newShape);
             });
+            //compute area
             var area = google.maps.geometry.spherical.computeArea(newShape.getPath());
-            var twoPlacedFloat = parseFloat(area).toFixed(2)
-            document.getElementById("area").innerHTML = "Area =" + twoPlacedFloat +" Square Metres";
+
+            //converting area from long float to 2 decimal points.
+            var twoPlacedFloat = parseFloat(area).toFixed(2);
+            area = twoPlacedFloat;
+            document.getElementById("area").innerHTML = "Area =" +area +" Square Metres";
             setSelection(newShape);
         }
     });
@@ -123,8 +130,7 @@ function initMap() {
     google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
     google.maps.event.addListener(map, 'click', clearSelection);
     google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
-
-
+    
 }
 
 
