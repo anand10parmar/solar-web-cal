@@ -5,6 +5,7 @@ function initMap() {
 
     // to clear the selected polygon
     function clearSelection() {
+
         if (selectedShape) {
             selectedShape.setEditable(false);
             selectedShape = null;
@@ -14,8 +15,14 @@ function initMap() {
     function setSelection(shape) {
         clearSelection();
         selectedShape = shape;
-        shape.setEditable(true);
+        google.maps.event.addListener(shape.getPath(), 'set_at', calcar);
+        google.maps.event.addListener(shape.getPath(), 'insert_at', calcar);
 
+    }
+
+    function calcar() {
+        var area = google.maps.geometry.spherical.computeArea(selectedShape.getPath());
+        document.getElementById("area").innerHTML = "Area =" + area;
     }
 
     function deleteSelectedShape() {
@@ -31,41 +38,15 @@ function initMap() {
         zoom: 3,
         center: {lat: 42.361145, lng: -71.057083}
     });
+// removed for to make a room for the drawing
 
-    var card = document.getElementById('pac-card');
+
+    // var card = document.getElementById('pac-card');
     var input = document.getElementById('pac-input');
-    var countries = document.getElementById('country-selector');
-
-
+    // var countries = document.getElementById('country-selector');
 
     var autocomplete = new google.maps.places.Autocomplete(input);
 
-    //Auto complete with country = united states only
-    // Set initial restrict to the greater list of countries.
-    autocomplete.setComponentRestrictions(
-        {'country': ['us']});
-
-    // Specify only the data fields that are needed.
-    autocomplete.setFields(
-        ['address_components', 'geometry', 'icon', 'name']);
-    // drawing polygon with google api
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.POLYGON,
-        drawingControl: true,
-        drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
-        },
-        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
-        circleOptions: {
-            fillColor: '#7c9199',
-            fillOpacity: 1,
-            strokeWeight: 5,
-            editable: true,
-            zIndex: 1
-        }
-    });
-    drawingManager.setMap(map);
 
 // place the marker on the search location
     var marker = new google.maps.Marker({
@@ -87,7 +68,7 @@ function initMap() {
         // If the place has a geometry, then present it on a map.
         if (place.geometry.viewport) {
             map.fitBounds(place.geometry.viewport);
-            map.setZoom(20);// Why 18? Because it looks good for drawing.
+            map.setZoom(20);// Why 20? Because it looks good for drawing.
         } else {
             map.setCenter(place.geometry.location);
 
@@ -97,6 +78,29 @@ function initMap() {
 
     });
 
+    //Drawing tools provided by google drawing API
+   var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.POLYLINE,
+       drawingControl: true,
+       drawingControlOptions: {
+                   //position of the toolbar
+                   position: google.maps.ControlPosition.TOP_CENTER,
+                   //Type of tools
+                   drawingModes: ['polyline'],
+                   editable: true
+               },
+        markerOptions: {
+            draggable: true
+        },
+       drawingModes: ['polygon', 'polyline'],
+        polylineOptions: {
+            editable: true
+        },
+
+        map: map
+    });
+    drawingManager.setMap(map);
+
 
     // Using geometry google API
 
@@ -105,7 +109,7 @@ function initMap() {
 
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
         if (e.type != google.maps.drawing.OverlayType.MARKER) {
-            // trigger to non drawing mode
+            // trigger to non drawing mode after drawing shape.
             drawingManager.setDrawingMode(null);
 
             // Add an event listener that selects the newly-drawn shape when the user
@@ -127,7 +131,6 @@ function initMap() {
     });
     // Clear the current selection when the drawing mode is changed, or when the
     // map is clicked.
-    google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
     google.maps.event.addListener(map, 'click', clearSelection);
     google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
 
