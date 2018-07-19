@@ -22,7 +22,11 @@ function initMap() {
 
     function calcar() {
         var area = google.maps.geometry.spherical.computeArea(selectedShape.getPath());
-        document.getElementById("area").innerHTML = "Area =" + area;
+        // document.getElementById("area").innerHTML = "Area = " + area;
+        var twoPlacedFloat = parseFloat(area).toFixed(2);
+        area = twoPlacedFloat;
+        document.getElementById("area").innerHTML = "Area =" +area +" Square Metres";
+        
     }
 
     function deleteSelectedShape() {
