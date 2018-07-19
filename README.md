@@ -38,6 +38,12 @@ Step-5: Enjoy!!
 - Converted long decimal to 2 decimal float using parseFloat(area).toFixed(2);
 
 ## Note
-- You can use square tool and rectangle tool to find the area.(I will think about it soon)
+- You can not use square tool and rectangle tool to find the area.(I will think about it soon)
 
 
+## Resources
+
+https://developers.google.com/maps/documentation/javascript/overlays#user_editable_shapes_events
+https://developers.google.com/maps/documentation/javascript/reference/3.exp/
+https://getbootstrap.com/docs/4.0/getting-started/introduction/
+https://stackoverflow.com/questions/12671077/calculate-area-of-a-drawn-polygon-on-google-map-javascript
